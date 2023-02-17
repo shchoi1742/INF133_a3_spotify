@@ -30,6 +30,18 @@ export class TrackData extends ResourceData {
 	}
 
 	get primaryArtist() {
-		return this.artists[0];
+		return this.artists[0].name;
+	}
+
+	get primaryArtistURL(){
+		return this.artists[0].url;
+	}
+
+	get albumURL(){
+		return this.album.url
+	}
+
+	get albumName(){
+		return this.album.name;
 	}
 }
