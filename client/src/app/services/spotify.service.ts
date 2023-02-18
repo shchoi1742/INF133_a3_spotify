@@ -118,7 +118,7 @@ export class SpotifyService {
     let artistAlbum: AlbumData[];
     let artistAlbumEncoded = encodeURIComponent(artistId);
     return this.sendRequestToExpress('/artist-albums/'+artistAlbumEncoded).then((data) => {
-      console.log(data);
+      // console.log(data);
       artistAlbum = data['items'].map((res) => {
         return new AlbumData(res);
       });
@@ -128,22 +128,37 @@ export class SpotifyService {
   }
 
   getAlbum(albumId:string):Promise<AlbumData> {
-    //TODO: use the album endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/album/' + encodeURIComponent(albumId)).then((data) => {
+      return new AlbumData(data);
+    });
+    // return null as any;
   }
 
   getTracksForAlbum(albumId:string):Promise<TrackData[]> {
-    //TODO: use the tracks for album endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/album-tracks/' + encodeURIComponent(albumId)).then((data) => {
+      let key = "items";
+      return data[key].map(track => new TrackData(track) ); 
+    });    
+    // return null as any;
   }
 
   getTrack(trackId:string):Promise<TrackData> {
-    //TODO: use the track endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/track/' + encodeURIComponent(trackId)).then((track) => {
+      return new TrackData(track); 
+    });    
+    // return null as any;
   }
 
   getAudioFeaturesForTrack(trackId:string):Promise<TrackFeature[]> {
-    //TODO: use the audio features for track endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/track-audio-features/' + encodeURIComponent(trackId)).then((track) => {
+      let trackFeatures = [];
+      // gets feature types to index json object
+      TrackFeature.FeatureTypes.forEach((element) => {
+        trackFeatures.push(new TrackFeature(element, track[element]));
+      });
+
+      return trackFeatures;
+    });
+    // return null as any;
   }
 }
